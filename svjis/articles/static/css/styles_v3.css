@@ -286,6 +286,75 @@ ul, ol { margin-bottom: 1rem; padding-left: 1.5rem; }
   flex-shrink: 0;
 }
 
+/* Header user menu (login / account dropdown) */
+.user-menu { position: relative; }
+.user-menu__trigger {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--radius-lg);
+  background: rgba(255,255,255,0.15);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #fff;
+  transition: background 0.15s ease;
+}
+.user-menu__trigger:hover { background: rgba(255,255,255,0.22); }
+.user-menu__trigger::-webkit-details-marker { display: none; }
+.user-menu__trigger::after {
+  content: '\25be';
+  margin-left: 0.125rem;
+  opacity: 0.8;
+}
+.user-menu[open] .user-menu__trigger::after { content: '\25b4'; }
+
+.user-menu__panel {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  min-width: 180px;
+  background: #fff;
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 0.375rem;
+  z-index: 200;
+}
+.user-menu__panel form { margin: 0; }
+.user-menu__item {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  background: none;
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--slate-700);
+  text-align: left;
+  text-decoration: none !important;
+  cursor: pointer;
+}
+.user-menu__item:hover { background: var(--slate-100); color: var(--slate-900); text-decoration: none !important; }
+
+.user-menu__login {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.375rem 0.875rem;
+  border-radius: var(--radius-lg);
+  background: rgba(255,255,255,0.15);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none !important;
+  transition: background 0.15s ease;
+}
+.user-menu__login:hover { background: rgba(255,255,255,0.25); color: #fff; text-decoration: none !important; }
+
 /* Mobile menu toggle */
 .menu-toggle {
   display: none;
@@ -1391,34 +1460,57 @@ img.led { border: 0; width: 16px; height: 16px; vertical-align: middle; }
    -------------------------------------------------------------------------- */
 
 .login-page {
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - var(--header-h) - 100px);
+  min-height: calc(100vh - var(--header-h) - 120px);
   padding: 2rem 1rem;
 }
 .login-card {
   width: 100%;
-  max-width: 420px;
+  max-width: 380px;
   background: #fff;
   border: 1px solid var(--slate-200);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-lg);
-  overflow: hidden;
 }
-.login-card__header {
-  background: var(--brand-700);
-  color: #fff;
-  padding: 1.5rem;
+.login-card__body { padding: 2.25rem 2rem; }
+
+.login-card__icon {
+  width: 46px;
+  height: 46px;
+  margin: 0 auto 1.25rem;
+  border-radius: 50%;
+  background: var(--brand-50);
+  color: var(--brand-600);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.login-card__icon svg { width: 20px; height: 20px; }
+
+.login-card__title {
   text-align: center;
+  font-size: 1.1875rem;
+  margin-bottom: 0.25rem;
 }
-.login-card__header h1 { color: #fff; font-size: 1.25rem; margin: 0; }
-.login-card__body { padding: 1.5rem; }
+.login-card__subtitle {
+  text-align: center;
+  font-size: 0.8125rem;
+  color: var(--slate-500);
+  margin-bottom: 1.75rem;
+}
+
 .login-card__body fieldset { border: none; padding: 0; margin: 0; }
 .login-card__body legend { display: none; }
-.login-card__body p { margin-bottom: 1rem; }
-.login-card__body .common-label { font-weight: 600; }
-.login-card__body .black-submit { width: 100%; padding: 0.625rem; font-size: 0.9375rem; }
+.login-card__body p { margin-bottom: 1.125rem; }
+.login-card__body .common-label { font-weight: 600; font-size: 0.8125rem; }
+.login-card__body .black-submit { width: 100%; padding: 0.625rem; font-size: 0.9375rem; margin-top: 0.25rem; }
+
+.login-card__footer { text-align: center; margin-top: 0.25rem; font-size: 0.8125rem; }
+.login-card__footer a { color: var(--slate-500); }
+.login-card__footer a:hover { color: var(--brand-700); }
 
 /* --------------------------------------------------------------------------
    Responsive
@@ -1462,7 +1554,7 @@ img.led { border: 0; width: 16px; height: 16px; vertical-align: middle; }
 
   .app-header__inner { padding: 0 0.75rem; }
   .app-header__logo-text { font-size: 1rem; }
-  .user-badge { display: none; }
+  .user-badge, .user-menu, .user-menu__login { display: none; }
 }
 
 @media (max-width: 480px) {

@@ -5,35 +5,35 @@
 {% block sitecontent %}
 <div class="login-page">
     <div class="login-card">
-        <div class="login-card__header">
-            <h1>{% translate 'Sign in to your account' %}</h1>
-        </div>
         <div class="login-card__body">
+            <div class="login-card__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <h1 class="login-card__title">{% translate 'Sign in to your account' %}</h1>
+            <p class="login-card__subtitle">{{ company_name|default:"SVJIS2" }}</p>
+
             <form action="{% url 'user_login' %}" method="post">
-                <fieldset>
-                    <legend>{% translate 'Please sign-in' %}</legend>
+                {% csrf_token %}
+                {% if next_page %}
+                <input type="hidden" name="next_page" value="{{ next_page }}" />
+                {% endif %}
 
-                    {% csrf_token %}
-                    {% if next_page %}
-                    <input type="hidden" name="next_page" value="{{ next_page }}" />
-                    {% endif %}
-
-                    <p>
-                        <label class="common-label" for="username-input">{% translate 'Username' %}</label>
-                        <input class="common-input" id="username-input" type="text" name="username" autocomplete="username" />
-                    </p>
-                    <p>
-                        <label class="common-label" for="pwd-input">{% translate 'Password' %}</label>
-                        <input class="common-input" id="pwd-input" type="password" name="password" autocomplete="current-password" />
-                    </p>
-                    <p>
-                        <input class="black-submit" id="sign-in" type="submit" value="{% translate 'Sign in' %}" />
-                    </p>
-                    <p style="text-align: center;">
-                        <a href="{% url 'lost_password' %}">{% translate 'Lost password' %}</a>
-                    </p>
-                </fieldset>
+                <p>
+                    <label class="common-label" for="username-input">{% translate 'Username' %}</label>
+                    <input class="common-input" id="username-input" type="text" name="username" autocomplete="username" />
+                </p>
+                <p>
+                    <label class="common-label" for="pwd-input">{% translate 'Password' %}</label>
+                    <input class="common-input" id="pwd-input" type="password" name="password" autocomplete="current-password" />
+                </p>
+                <p>
+                    <input class="black-submit" id="sign-in" type="submit" value="{% translate 'Sign in' %}" />
+                </p>
             </form>
+
+            <div class="login-card__footer">
+                <a href="{% url 'lost_password' %}">{% translate 'Lost password' %}</a>
+            </div>
         </div>
     </div>
 </div>

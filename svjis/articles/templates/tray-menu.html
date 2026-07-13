@@ -7,9 +7,6 @@
         <a href="{{ obj.link }}" class="tray-nav__item{% if obj.active %} tray-nav__item--active{% endif %}">{{ obj.description }}</a>
         {% endfor %}
         {% endif %}
-        {% if not request.user.is_authenticated %}
-        <a href="{% url 'login_page' %}" class="tray-nav__item">{% translate 'Login' %}</a>
-        {% endif %}
 
         <div class="tray-nav__spacer"></div>
 
