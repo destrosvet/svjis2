@@ -4,44 +4,46 @@
 
 {% block content %}
 
-<h1 class="page-title">{% translate 'Adverts' %}: {{ scope_description }}</h1>
+<h1 class="page-title" id="adverts">{{ header }}</h1>
 
 {% if perms.articles.svjis_add_advert %}
-<a href="{% url 'adverts_edit' pk=0 %}" class="secondary-button">{% translate 'Create new advert' %}</a><br>
+<a href="{% url 'adverts_edit' pk=0 %}" class="btn--primary">{% translate 'Create new advert' %}</a>
 {% endif %}
 
 {% if object_list %}
 {% for obj in object_list %}
-
-<!-- advert -->&nbsp;
-<div class="advert_c{{ obj.type.id }}">
+<div class="advert_c{{ obj.type.pk|default:'1' }}">
     <div class="advert-desc">
-        <h2 {% if not obj.published %}style="text-decoration: line-through;"{% endif %}>{{ obj.header }}</h2>
+        <h2>{{ obj.header }}</h2>
         <p class="info">
-            <a href="{% url 'adverts_list' %}?scope={{ obj.type.description }}">{{ obj.type.description }}</a>: <strong>{{ obj.created_date|date:"d.m.Y" }}</strong>, {% translate 'Author' %}: <strong>{{ obj.created_by_user.first_name }}&nbsp;{{ obj.created_by_user.last_name }}</strong>
-            {% if obj.created_by_user == user %}
-            &nbsp;<a class="secondary-button" href="{% url 'adverts_edit' pk=obj.pk %}">{% translate 'Edit' %}</a>
-            {% endif %}
-
+            {% translate 'Type' %}: <strong>{{ obj.type.description }}</strong>,
+            {% translate 'Author' %}: <strong>{{ obj.created_by_user.first_name }}&nbsp;{{ obj.created_by_user.last_name }}</strong>,
+            {{ obj.created_date|date:"d.m.Y" }}
         </p>
-        <div class="body">
-            <p>{{ obj.body|replace_url_to_link|linebreaks }}</p>
-
-            {% if obj.assets %}
-            <p>
-            {% for a in obj.assets %}
-                <img src="/static/gfx/{{ a.icon }}" class="led" alt="{{ a.basename }}">&nbsp;<a href="/media/{{ a.file }}">{% if a.description %}{{ a.description }}{% else %}{{ a.basename }}{% endif %}</a>&nbsp;
-            {% endfor %}
-            </p>
-            {% endif %}
-        </div>
+        <div class="body">{{ obj.body|safe }}</div>
+        {% if obj.phone or obj.email %}
         <p class="contact">
-            {% if obj.phone %}{% translate 'Phone' %}:&nbsp;<strong>{{ obj.phone }}</strong><br>{% endif %}
-            {% if obj.email %}{% translate 'E-Mail' %}:&nbsp;<strong><a href="mailto:{{ obj.email }}">{{ obj.email }}</a></strong>{% endif %}
+            {% if obj.phone %}{% translate 'Phone' %}: {{ obj.phone }}{% endif %}
+            {% if obj.phone and obj.email %}&nbsp;|&nbsp;{% endif %}
+            {% if obj.email %}{% translate 'E-Mail' %}: <a href="mailto:{{ obj.email }}">{{ obj.email }}</a>{% endif %}
         </p>
+        {% endif %}
+        {% if obj.assets %}
+        <p>
+        {% for a in obj.assets %}
+            <span class="icon-static">{% icon a.icon %}</span>
+            <a href="/media/{{ a.file }}">{% if a.description %}{{ a.description }}{% else %}{{ a.basename }}{% endif %}</a>
+            {% if not forloop.last %}&nbsp;|&nbsp;{% endif %}
+        {% endfor %}
+        </p>
+        {% endif %}
+        {% if perms.articles.svjis_add_advert and obj.created_by_user == request.user %}
+        <p>
+            <a class="secondary-button" href="{% url 'adverts_edit' pk=obj.pk %}">{% translate 'Edit' %}</a>
+        </p>
+        {% endif %}
     </div>
 </div>
-
 {% endfor %}
 {% endif %}
 

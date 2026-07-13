@@ -3,13 +3,16 @@
 {% load i18n %}
 
 {% block sitecontent %}
-<div class="main-content">
-
-    <h1 class="page-title">{% translate 'Page not found' %}</h1>
-
-    <p>{% translate "Page doesn't exist or you have no access." %}</p>
-
-    <p>{% translate "Continue" %} <a href="/">{% translate "here" %}</a></p>
-
+<div class="login-page">
+    <div class="login-card">
+        <div class="login-card__header">
+            <h1>404</h1>
+        </div>
+        <div class="login-card__body" style="text-align: center;">
+            <p style="font-size: 1.125rem; color: var(--slate-600);">{% translate 'Page not found' %}</p>
+            <p>{% translate 'The page you are looking for does not exist.' %}</p>
+            <a href="/" class="btn--primary">{% translate 'Go to homepage' %}</a>
+        </div>
+    </div>
 </div>
 {% endblock sitecontent %}

@@ -1,13 +1,26 @@
 {% load article_filters i18n %}
 
-
-<div class="header">
-    {% if company_picture %}
-    <div class="logo">
-        <a href="/" title="[{% translate 'Go to homepage' %}]">
-            <img id="logo" alt="logo" src="/media/{{ company_picture }}"></img>
-        </a>
+<header class="app-header">
+    <div class="app-header__inner">
+        <button class="menu-toggle" aria-label="Menu">
+            <span class="menu-toggle__bar"></span>
+            <span class="menu-toggle__bar"></span>
+            <span class="menu-toggle__bar"></span>
+        </button>
+        <div class="app-header__logo">
+            {% if company_picture %}
+            <a href="/" title="{% translate 'Go to homepage' %}">
+                <img id="logo" alt="logo" src="/media/{{ company_picture }}" />
+            </a>
+            {% endif %}
+            <span class="app-header__logo-text">{{ company_name|default:"SVJIS2" }}</span>
+        </div>
+        <div class="app-header__spacer"></div>
+        {% if request.user.is_authenticated %}
+        <div class="user-badge">
+            <span class="user-badge__avatar">{{ request.user.first_name|first }}{{ request.user.last_name|first }}</span>
+            <span>{{ request.user.first_name }}&nbsp;{{ request.user.last_name }}</span>
+        </div>
+        {% endif %}
     </div>
-    {% endif %}
-    <div id="company_name">{{ company_name|default:"SVJIS2" }}</div>
-</div>
+</header>

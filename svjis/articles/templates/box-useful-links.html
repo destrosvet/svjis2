@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load article_filters i18n %}
 
 {% if useful_links_list %}
 
@@ -10,9 +10,7 @@
         <ul class="usefullinks">
         {% for link in useful_links_list %}
             <li>
-                <span>
-                    <img style="float: left;" src="/static/gfx/attach_2.png" class="led" title="{{ link.header }}" alt="{% translate 'Paper clip' %}">
-                </span>
+                <span class="icon-static" title="{{ link.header }}">{% icon 'attach' %}</span>
                 <a href="{{ link.link }}">{{ link.header }}</a>
             </li>
         {% endfor %}

@@ -337,6 +337,27 @@ def get_article_asset(request, slug, filename):
     return FileResponse(asset.file.open("rb"), as_attachment=False, filename=safe_name)
 
 
+@require_GET
+def get_article_cover_image(request, slug, filename):
+    # Block path traversal attempts like ../../secret.txt
+    safe_name = PurePosixPath(filename).name
+    if safe_name != filename:
+        raise Http404()
+
+    article = get_object_or_404(models.Article, slug=slug)
+    if not article.cover_image or PurePosixPath(article.cover_image.name).name != safe_name:
+        raise Http404()
+
+    # Verify access using the same visibility rules as the article itself
+    if get_article(slug, request.user) is None:
+        if request.user.is_authenticated:
+            raise Http404
+        else:
+            return redirect(reverse(login_page_view) + '?next=' + request.get_full_path())
+
+    return FileResponse(article.cover_image.open("rb"), as_attachment=False, filename=safe_name)
+
+
 # Login
 @require_GET
 def login_page_view(request):

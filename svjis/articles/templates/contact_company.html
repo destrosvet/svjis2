@@ -1,75 +1,82 @@
 {% extends "base-with-aside-menu-content.html" %}
 
-{% load i18n %}
+{% load article_filters i18n %}
 
 {% block content %}
 
 <h1 class="page-title" id="contact">{{ company.name }}</h1>
 
-<table class="no-border" aria-describedby="contact">
-    {% if company.address %}
-    <tr>
-        <th scope="row" style="text-align: left">{% translate 'Address' %}:&nbsp;</th>
-        <td>{{ company.address }}</td>
-    </tr>
-    {% endif %}
-    {% if company.city %}
-    <tr>
-        <th scope="row" style="text-align: left">{% translate 'City' %}:&nbsp;</th>
-        <td>{{ company.city }}</td>
-    </tr>
-    {% endif %}
-    {% if company.post_code %}
-    <tr>
-        <th scope="row" style="text-align: left">{% translate 'Post code' %}:&nbsp;</th>
-        <td>{{ company.post_code }}</td>
-    </tr>
-    {% endif %}
-    {% if company.phone %}
-    <tr>
-        <th scope="row" style="text-align: left">{% translate 'Phone' %}:&nbsp;</th>
-        <td>{{ company.phone }}</td>
-    </tr>
-    {% endif %}
-    {% if company.email %}
-    <tr>
-        <th scope="row" style="text-align: left">{% translate 'E-Mail' %}:&nbsp;</th>
-        <td><a href="mailto:{{ company.email }}">{{ company.email }}</a></td>
-    </tr>
-    {% endif %}
-    {% if company.registration_no %}
-    <tr>
-        <th scope="row" style="text-align: left">{% translate 'Registration No.' %}:&nbsp;</th>
-        <td>{{ company.registration_no }}</td>
-    </tr>
-    {% endif %}
-    {% if company.vat_registration_no %}
-    <tr>
-        <th scope="row" style="text-align: left">{% translate 'VAT Registration No.' %}:&nbsp;</th>
-        <td>{{ company.vat_registration_no }}</td>
-    </tr>
-    {% endif %}
-    {% if company.internet_domain %}
-    <tr>
-        <th scope="row" style="text-align: left">{% translate 'Internet domain' %}:&nbsp;</th>
-        <td>{{ company.internet_domain }}</td>
-    </tr>
-    {% endif %}
-</table>
+<div class="card contact-card">
+    <div class="card__body">
+        <dl class="contact-info">
+            {% if company.address %}
+            <div class="contact-info__row">
+                <dt><span class="contact-icon" aria-hidden="true">{% icon 'map-pin' %}</span>{% translate 'Address' %}</dt>
+                <dd>{{ company.address }}</dd>
+            </div>
+            {% endif %}
+            {% if company.city %}
+            <div class="contact-info__row">
+                <dt><span class="contact-icon" aria-hidden="true">{% icon 'building' %}</span>{% translate 'City' %}</dt>
+                <dd>{{ company.city }}</dd>
+            </div>
+            {% endif %}
+            {% if company.post_code %}
+            <div class="contact-info__row">
+                <dt><span class="contact-icon" aria-hidden="true">{% icon 'hash' %}</span>{% translate 'Post code' %}</dt>
+                <dd>{{ company.post_code }}</dd>
+            </div>
+            {% endif %}
+            {% if company.phone %}
+            <div class="contact-info__row">
+                <dt><span class="contact-icon" aria-hidden="true">{% icon 'phone' %}</span>{% translate 'Phone' %}</dt>
+                <dd><a href="tel:{{ company.phone }}">{{ company.phone }}</a></dd>
+            </div>
+            {% endif %}
+            {% if company.email %}
+            <div class="contact-info__row">
+                <dt><span class="contact-icon" aria-hidden="true">{% icon 'email' %}</span>{% translate 'E-Mail' %}</dt>
+                <dd><a href="mailto:{{ company.email }}">{{ company.email }}</a></dd>
+            </div>
+            {% endif %}
+            {% if company.registration_no %}
+            <div class="contact-info__row">
+                <dt><span class="contact-icon" aria-hidden="true">{% icon 'document' %}</span>{% translate 'Registration No.' %}</dt>
+                <dd>{{ company.registration_no }}</dd>
+            </div>
+            {% endif %}
+            {% if company.vat_registration_no %}
+            <div class="contact-info__row">
+                <dt><span class="contact-icon" aria-hidden="true">{% icon 'document' %}</span>{% translate 'VAT Registration No.' %}</dt>
+                <dd>{{ company.vat_registration_no }}</dd>
+            </div>
+            {% endif %}
+            {% if company.internet_domain %}
+            <div class="contact-info__row">
+                <dt><span class="contact-icon" aria-hidden="true">{% icon 'globe' %}</span>{% translate 'Internet domain' %}</dt>
+                <dd>{{ company.internet_domain }}</dd>
+            </div>
+            {% endif %}
+        </dl>
+    </div>
+</div>
 
 {% if company.board %}
-<table class="no-border" aria-describedby="contact">
-    <tr>
-        <th style="text-align: left" colspan="3">{% translate 'Board' %}:&nbsp;</th>
-    </tr>
-    {% for obj in company.board %}
-    <tr>
-        <td>{{ obj.member.userprofile.salutation }}&nbsp;</td>
-        <td>{{ obj.member.first_name }}&nbsp;{{ obj.member.last_name }}&nbsp;&nbsp;</td>
-        <td>{{ obj.position }}&nbsp;</td>
-    </tr>
-    {% endfor %}
-</table>
+<h2 class="page-title" id="board">{% translate 'Board' %}</h2>
+
+<div class="card contact-card">
+    <div class="card__body">
+        <ul class="board-list">
+            {% for obj in company.board %}
+            <li class="board-list__item">
+                <span class="board-list__avatar">{{ obj.member.first_name|first }}{{ obj.member.last_name|first }}</span>
+                <span class="board-list__name">{{ obj.member.userprofile.salutation }}&nbsp;{{ obj.member.first_name }}&nbsp;{{ obj.member.last_name }}</span>
+                <span class="board-list__position">{{ obj.position }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
 {% endif %}
 
 {% endblock content %}

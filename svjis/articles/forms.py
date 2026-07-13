@@ -30,9 +30,10 @@ class ArticleMenuForm(forms.ModelForm):
 class ArticleForm(forms.ModelForm):
     class Meta:
         model = models.Article
-        fields = ("header", "perex", "body", "menu", "allow_comments", "published", "visible_for_all")
+        fields = ("header", "cover_image", "perex", "body", "menu", "allow_comments", "published", "visible_for_all")
         widgets = {
             'header': forms.widgets.TextInput(attrs={'class': 'common-input full-width', 'size': '50'}),
+            'cover_image': forms.widgets.FileInput(attrs={'class': 'common-input'}),
             'perex': TinyMCE(
                 attrs={'class': 'common-textarea', 'rows': '20', 'cols': '30'},
                 mce_attrs={
@@ -49,10 +50,10 @@ class ArticleForm(forms.ModelForm):
                     'width': '100%',
                 },
             ),
-            'menu': forms.widgets.Select(attrs={'class': 'common-input'}),
-            'allow_comments': forms.widgets.CheckboxInput(attrs={'class': 'common-input-chck'}),
-            'published': forms.widgets.CheckboxInput(attrs={'class': 'common-input-chck'}),
-            'visible_for_all': forms.widgets.CheckboxInput(attrs={'class': 'common-input-chck'}),
+            'menu': forms.widgets.Select(attrs={'class': 'common-input', 'form': 'article-edit-form'}),
+            'allow_comments': forms.widgets.CheckboxInput(attrs={'class': 'common-input-chck', 'form': 'article-edit-form'}),
+            'published': forms.widgets.CheckboxInput(attrs={'class': 'common-input-chck', 'form': 'article-edit-form'}),
+            'visible_for_all': forms.widgets.CheckboxInput(attrs={'class': 'common-input-chck', 'form': 'article-edit-form'}),
         }
 
 

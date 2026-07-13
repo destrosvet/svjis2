@@ -24,3 +24,8 @@ local_requirements.txt
 *.mo
 playwright_output/
 svjis2-data/
+
+# Frontend build artifacts
+_build_result.txt
+_diag.txt
+build_log.txt

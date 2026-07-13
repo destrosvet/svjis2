@@ -1,39 +1,29 @@
 {% load i18n %}
 
-<div class="side-menu__login">
+<div class="side-login">
 {% if request.user.is_authenticated %}
-    <div class="side-menu__login_header">{% translate 'User' %}</div>
+    <div class="side-login__label">{% translate 'User' %}</div>
     <form action="{% url 'user_logout' %}" method="post">
-        <div class="side-menu__login_form">
+        <div class="side-login__user">
+            {{ request.user.first_name }}&nbsp;{{ request.user.last_name }}
             {% csrf_token %}
-            <p>
-                {{ request.user.first_name }}&nbsp;{{ request.user.last_name }}<br>
-                <input id="logout-submit" type="submit" value="{% translate 'Logout' %}" />
-            </p>
+            <input id="logout-submit" type="submit" value="{% translate 'Logout' %}" />
         </div>
     </form>
 {% else %}
-    <div class="side-menu__login_header">{% translate 'Login' %}</div>
+    <div class="side-login__label">{% translate 'Login' %}</div>
     <form action="{% url 'user_login' %}" method="post">
-        <div class="side-menu__login_form">
-            <div class="side-menu__login_form_in">
-                {% csrf_token %}
-                <p>
-                    <label id="login-label" for="login-input">{% translate 'Username' %}</label>
-                    <input id="login-input" type="text" name="username" size="10" />
-                </p>
-                <p>
-                    <label id="password-label" for="password-input">{% translate 'Password' %}</label>
-                    <input id="password-input" type="password" name="password" size="10" />
-                </p>
-                <p>
-                    <input id="login-submit" type="submit" value="{% translate 'Sign in' %}" />
-                </p>
-                <p>
-                    <a href="{% url 'lost_password' %}">{% translate 'Lost password' %}</a>
-                </p>
-            </div>
+        {% csrf_token %}
+        <div class="side-login__row">
+            <label class="side-login__label" for="login-input">{% translate 'Username' %}</label>
+            <input id="login-input" class="side-login__input" type="text" name="username" size="10" />
         </div>
+        <div class="side-login__row">
+            <label class="side-login__label" for="password-input">{% translate 'Password' %}</label>
+            <input id="password-input" class="side-login__input" type="password" name="password" size="10" />
+        </div>
+        <input id="login-submit" class="side-login__btn" type="submit" value="{% translate 'Sign in' %}" />
+        <a class="side-login__link" href="{% url 'lost_password' %}">{% translate 'Lost password' %}</a>
     </form>
 {% endif %}
 </div>

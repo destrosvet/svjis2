@@ -1,6 +1,6 @@
 {% extends "base-with-aside-menu-content.html" %}
 
-{% load i18n %}
+{% load article_filters i18n %}
 
 {% block content %}
 
@@ -20,8 +20,8 @@
     {% for obj in object_list %}
     <tr>
         <td>{{ forloop.counter }}</td>
-        <td><a href="{% url 'admin_entrance_edit' pk=obj.pk %}"><img src="/static/gfx/pencil.png" class="led" title="{% translate 'Edit' %}" alt="{% translate 'Edit' %}"></a></td>
-        <td><a onclick="if (!confirm('{% translate 'Do you want to delete' %} {{ obj.description }} ?')) return false;" href="{% url 'admin_entrance_delete' pk=obj.id %}"><img src="/static/gfx/delete.png" class="led" title="{% translate 'Delete' %}" alt="{% translate 'Delete' %}"></a></td>
+        <td class="icon"><a class="icon-btn icon-btn--delete" title="{% translate 'Delete' %}" onclick="if (!confirm('{% translate 'Do you want to delete' %} {{ obj.description }} ?')) return false;" href="{% url 'admin_entrance_delete' pk=obj.id %}">{% icon 'delete' %}</a></td>
+        <td class="icon"><a class="icon-btn" title="{% translate 'Edit' %}" href="{% url 'admin_entrance_edit' pk=obj.pk %}">{% icon 'edit' %}</a></td>
         <td>{{ obj.description }}</td>
         <td>{{ obj.address }}</td>
     </tr>

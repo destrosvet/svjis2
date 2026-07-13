@@ -3,7 +3,7 @@
 
 {% if is_paginated %}
 <!-- pagination starts -->
-<p class="paginator">
+<nav class="paginator">
     {% if page_obj.has_previous %}
         <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}&{{ page_parameter }}">{% translate 'Previous' %}</a>&nbsp;
     {% endif %}
@@ -34,6 +34,6 @@
 
         &nbsp;<a href="?page={{ page_obj.next_page_number }}&{{ page_parameter }}">{% translate 'Next' %}</a>
     {% endif %}
-</p>
+</nav>
 <!-- pagination end -->
 {% endif %}

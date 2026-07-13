@@ -5,6 +5,9 @@
 {% block content %}
 
 <div class="article-detail">
+    {% if obj.cover_image %}
+    <img class="article-img" src="/media/{{ obj.cover_image }}" alt="">
+    {% endif %}
     <h1 class="article-title">{{ obj.header|highlight:search|safe }}</h1>
     <p class="info">
         <a href="{% url 'main_filtered' menu=obj.menu.id %}">{{ obj.menu.description }}</a>:  <strong>{{ obj.created_date|date:"d.m.Y" }}</strong>, {% translate 'Author' %}: <strong>{{ obj.author.first_name }}&nbsp;{{ obj.author.last_name }}</strong>
@@ -22,7 +25,7 @@
         </tr>
         {% for a in obj.assets %}
         <tr>
-            <td class="icon"><img src="/static/gfx/{{ a.icon }}" class="led" alt="{{ a.basename }}"></td>
+            <td class="icon"><span class="icon-static">{% icon a.icon %}</span></td>
             <td><a href="/media/{{ a.file }}">{% if a.description %}{{ a.description }}{% else %}{{ a.basename }}{% endif %}</a></td>
         </tr>
         {% endfor %}

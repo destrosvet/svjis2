@@ -1,104 +1,148 @@
 {% extends "base-with-aside-menu-content.html" %}
 
-{% load i18n %}
+{% load article_filters i18n %}
 
 {% block content %}
 
 {{ form.media }}
 
 <h1 class="page-title">{% translate 'Article' %}</h1>
-<form action="{% url 'redaction_article_save' %}" method="post">
-    {% csrf_token %}
-    <input type="hidden" name="pk" value="{{ pk }}">
-    <p>
-        {{ form.header.label }}<br>
-        {{ form.header }}
-    </p>
-    <p>
-        {{ form.perex.label }}<br>
-        {{ form.perex }}
-    </p>
-    <p>
-        {{ form.body.label }}<br>
-        {{ form.body }}
-    </p>
-    <fieldset>
-        <legend>{% translate 'Properties' %}</legend>
+
+<div class="edit-layout">
+
+    <form id="article-edit-form" action="{% url 'redaction_article_save' %}" method="post" enctype="multipart/form-data" class="edit-main">
+        {% csrf_token %}
+        <input type="hidden" name="pk" value="{{ pk }}">
         <p>
-            <label class="common-label" for="{{ form.menu.auto_id }}">{{ form.menu.label }}</label>
-            {{ form.menu }}
+            {{ form.header.label }}<br>
+            {{ form.header }}
         </p>
         <p>
-            <label class="common-label" for="{{ form.allow_comments.auto_id }}">{{ form.allow_comments.label }}</label>
-            {{ form.allow_comments }}
+            {{ form.cover_image.label }}<br>
+            {% if form.instance.cover_image %}
+            <span class="article-thumb article-thumb--form">
+                <img src="/media/{{ form.instance.cover_image }}" alt="">
+            </span>
+            {% endif %}
+            {{ form.cover_image }}
         </p>
         <p>
-            <label class="common-label" for="{{ form.published.auto_id }}">{{ form.published.label }}</label>
-            {{ form.published }}
+            {{ form.perex.label }}<br>
+            {{ form.perex }}
         </p>
-    </fieldset>
-    <fieldset>
-        <legend>{% translate 'Visible for' %}</legend>
         <p>
-            <label class="common-label" for="{{ form.visible_for_all.auto_id }}">{{ form.visible_for_all.label }}</label>
-            {{ form.visible_for_all }}
+            {{ form.body.label }}<br>
+            {{ form.body }}
         </p>
-        {% if group_list %}
-        {% for obj in group_list %}
-        <p>
-            <label class="common-label" id="{{ obj.name }}-label" for="{{ obj.name }}-input">{{ obj.name }}</label>
-            <input class="common-input-chck" id="{{ obj.name }}-input" type="checkbox" name="{{ obj.name }}" {% if obj.checked %}checked{% endif %}/>
-        </p>
-        {% endfor %}
+    </form>
+
+    <div class="edit-sidebar">
+
+        <div class="card">
+            <div class="card__body">
+                <input class="btn--primary btn--block" form="article-edit-form" id="submit" type="submit" value="{% translate 'Publish' %}" />
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card__header card__header--light">{% translate 'Properties' %}</div>
+            <div class="card__body">
+                <p>
+                    <label class="common-label" for="{{ form.menu.auto_id }}">{{ form.menu.label }}</label>
+                    {{ form.menu }}
+                </p>
+                <p>
+                    <label class="common-label" for="{{ form.allow_comments.auto_id }}">{{ form.allow_comments.label }}</label>
+                    {{ form.allow_comments }}
+                </p>
+                <p>
+                    <label class="common-label" for="{{ form.published.auto_id }}">{{ form.published.label }}</label>
+                    {{ form.published }}
+                </p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card__header card__header--light">{% translate 'Visible for' %}</div>
+            <div class="card__body">
+                <p>
+                    <label class="common-label" for="{{ form.visible_for_all.auto_id }}">{{ form.visible_for_all.label }}</label>
+                    {{ form.visible_for_all }}
+                </p>
+                {% if group_list %}
+                <p>
+                    <label class="common-label">{% translate 'Groups' %}</label>
+                    <details class="group-select">
+                        <summary class="group-select__summary"><span id="group-select-label">{% translate 'Select groups' %}</span></summary>
+                        <div class="group-select__panel">
+                            {% for obj in group_list %}
+                            <label class="group-select__option">
+                                <input type="checkbox" form="article-edit-form" name="visible_for_groups" value="{{ obj.name }}" {% if obj.checked %}checked{% endif %}>
+                                {{ obj.name }}
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </details>
+                </p>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if pk %}
+        <div class="card">
+            <div class="card__header card__header--light">{% translate 'Assets' %}</div>
+            <div class="card__body">
+                {% if form.instance.assets %}
+                <ul class="asset-list">
+                    {% for a in form.instance.assets %}
+                    <li class="asset-list__item">
+                        <span class="icon-static">{% icon a.icon %}</span>
+                        <a href="/media/{{ a.file }}" title="{{ a.basename }}">{% if a.description %}{{ a.description }}{% else %}{{ a.basename }}{% endif %}</a>
+                        <a class="icon-btn icon-btn--delete" title="{% translate 'Delete' %}" onclick="if (!confirm('{% translate 'Do you want to delete' %} {{ a.description }} ?')) return false;" href="{% url 'redaction_article_asset_delete' pk=a.id %}">{% icon 'delete' %}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
+                <form action="{% url 'redaction_article_asset_save' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="article_pk" value="{{ pk }}">
+                    <p>
+                        <label class="common-label" for="{{ asset_form.description.auto_id }}">{{ asset_form.description.label }}</label>
+                        {{ asset_form.description }}
+                    </p>
+                    <p>
+                        <label class="common-label" for="{{ asset_form.file.auto_id }}">{{ asset_form.file.label }}</label>
+                        {{ asset_form.file }}
+                    </p>
+                    <p>
+                        <input class="btn--secondary btn--block" id="submit2" type="submit" value="{% translate 'Upload' %}" />
+                    </p>
+                </form>
+            </div>
+        </div>
         {% endif %}
-    </fieldset>
-    <p>
-        <input class="black-submit" id="submit" type="submit" value="{% translate 'Save' %}" />
-    </p>
-</form>
 
+    </div>
 
-{% if pk %}
-<h2 id="assets" class="page-title">{% translate 'Assets' %}</h2>
+</div>
 
-{% if form.instance.assets %}
-<table class="list fixed" aria-describedby="assets">
-    <tr>
-        <th class="icon">&nbsp;</th>
-        <th>{% translate 'Name' %}</th>
-        <th>{% translate 'Description' %}</th>
-        <th class="icon">&nbsp;</th>
-    </tr>
-    {% for a in form.instance.assets %}
-    <tr>
-        <td class="icon"><img src="/static/gfx/{{ a.icon }}" class="led" alt="{{ a.basename }}"></td>
-        <td id="asset_path_{{ a.pk }}" title="{{ a.basename }}"><a href="/media/{{ a.file }}">{{ a.basename }}</a></td>
-        <td id="asset_name_{{ a.pk }}" title="{{ a.description }}">{{ a.description }}</td>
-        <td class="icon"><a onclick="if (!confirm('{% translate 'Do you want to delete' %} {{ a.description }} ?')) return false;" href="{% url 'redaction_article_asset_delete' pk=a.id %}"><img src="/static/gfx/delete.png" class="led" title="{% translate 'Delete' %}" alt="{% translate 'Delete' %}"></a></td>
-    </tr>
-    {% endfor %}
-</table>
-{% endif %}
-
-<form action="{% url 'redaction_article_asset_save' %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <input type="hidden" name="article_pk" value="{{ pk }}">
-
-    <fieldset>
-        <legend>{% translate 'Assets' %}</legend>
-        <p>
-            <label class="common-label" for="{{ asset_form.description.auto_id }}">{{ asset_form.description.label }}</label>
-            {{ asset_form.description }}
-        </p>
-        <p>
-            <label class="common-label" for="{{ asset_form.file.auto_id }}">{{ asset_form.file.label }}</label>
-            {{ asset_form.file }}
-        </p>
-    </fieldset>
-    <p>
-        <input class="black-submit" id="submit2" type="submit" value="{% translate 'Upload' %}" />
-    </p>
-</form>
-{% endif %}
+<script>
+(function () {
+    var details = document.querySelector('.group-select');
+    if (!details) return;
+    var label = details.querySelector('#group-select-label');
+    function refresh() {
+        var checked = details.querySelectorAll('input[type="checkbox"]:checked');
+        if (checked.length === 0) {
+            label.textContent = '{% translate "Select groups" %}';
+        } else {
+            label.textContent = Array.prototype.map.call(checked, function (c) { return c.value; }).join(', ');
+        }
+    }
+    details.addEventListener('change', refresh);
+    refresh();
+})();
+</script>
 
 {% endblock content %}

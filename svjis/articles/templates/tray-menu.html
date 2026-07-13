@@ -1,25 +1,23 @@
-{% load i18n %}
+{% load article_filters i18n %}
 
-<nav class="tray">
-    <div class="menu-toggle">
-        <div class="bar"></div>
-        <div class="bar"></div>
-        <div class="bar"></div>
-    </div>
-    <div class="menu-env">
-        <div class="menu-user">
-            {% if request.user.is_authenticated %}
-            {{ request.user.first_name }}&nbsp;{{ request.user.last_name }}
-            {% else %}
-            [<a href="{% url 'login_page' %}">{% translate 'Login' %}</a>]
-            {% endif %}
-        </div>
-        <ul class="menu">
-            {% if tray_menu_items %}
-            {% for obj in tray_menu_items %}
-            <li {% if obj.active %}id="tray-active"{% endif %}><a href="{{ obj.link }}">{{ obj.description }}</a></li>
-            {% endfor %}
-            {% endif %}
-        </ul>
-    </div>
-</nav>
+<div class="tray-nav-wrapper">
+    <nav class="tray-nav">
+        {% if tray_menu_items %}
+        {% for obj in tray_menu_items %}
+        <a href="{{ obj.link }}" class="tray-nav__item{% if obj.active %} tray-nav__item--active{% endif %}">{{ obj.description }}</a>
+        {% endfor %}
+        {% endif %}
+        {% if not request.user.is_authenticated %}
+        <a href="{% url 'login_page' %}" class="tray-nav__item">{% translate 'Login' %}</a>
+        {% endif %}
+
+        <div class="tray-nav__spacer"></div>
+
+        {% if search_endpoint %}
+        <form class="tray-search" action="{{ search_endpoint }}" method="get">
+            <input class="tray-search__input" type="text" name="search" placeholder="{% translate 'Search' %}" aria-label="{% translate 'Search' %}" />
+            <button class="tray-search__btn" type="submit" aria-label="{% translate 'Search' %}">{% icon 'search' %}</button>
+        </form>
+        {% endif %}
+    </nav>
+</div>

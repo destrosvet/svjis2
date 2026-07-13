@@ -22,6 +22,12 @@ MEDIA_FAULT_ASSETS_DIR = 'faults'
 #####################
 
 
+def article_cover_directory_path(instance, filename):
+    # Lives under a separate "cover/" segment so it doesn't collide with the
+    # access-controlled ArticleAsset route (media/articles/<slug>/<filename>).
+    return f'{MEDIA_ARTICLE_ASSETS_DIR}/{instance.slug}/cover/{filename}'
+
+
 class Article(models.Model):
     header = models.CharField(_("Header"), max_length=50)
     slug = models.CharField(max_length=50, unique=True)
@@ -30,6 +36,7 @@ class Article(models.Model):
     published = models.BooleanField(_("Published"), default=False)
     perex = models.TextField(_("Perex"))
     body = models.TextField(_("Body"), blank=True)
+    cover_image = models.FileField(_("Cover image"), upload_to=article_cover_directory_path, null=True, blank=True)
     menu = models.ForeignKey("ArticleMenu", on_delete=models.CASCADE, null=False, blank=False)
     allow_comments = models.BooleanField(_("Allow comments"), default=False)
     watching_users = models.ManyToManyField(User, related_name='watching_article_set')

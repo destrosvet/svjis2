@@ -227,10 +227,10 @@ def redaction_article_edit_view(request, pk):
 def redaction_article_save_view(request):
     pk = int(request.POST['pk'])
     if not pk:
-        form = forms.ArticleForm(request.POST)
+        form = forms.ArticleForm(request.POST, request.FILES)
     else:
         instance = get_object_or_404(models.Article, pk=pk)
-        form = forms.ArticleForm(request.POST, instance=instance)
+        form = forms.ArticleForm(request.POST, request.FILES, instance=instance)
 
     if form.is_valid():
         obj = form.save(commit=False)
@@ -240,12 +240,12 @@ def redaction_article_save_view(request):
         pk = obj.pk
 
         # Set groups
-        group_list = obj.visible_for_group.all()
+        selected_group_names = set(request.POST.getlist('visible_for_groups'))
+        current_group_names = set(obj.visible_for_group.values_list('name', flat=True))
         for g in Group.objects.all():
-            gr_set = request.POST.get(g.name, False) == 'on'
-            if gr_set and g not in group_list:
+            if g.name in selected_group_names and g.name not in current_group_names:
                 obj.visible_for_group.add(g)
-            if not gr_set and g in group_list:
+            if g.name not in selected_group_names and g.name in current_group_names:
                 obj.visible_for_group.remove(g)
 
         # Set watching users

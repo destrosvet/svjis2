@@ -1,6 +1,6 @@
 {% extends "base-with-aside-menu-content.html" %}
 
-{% load i18n %}
+{% load article_filters i18n %}
 
 {% block content %}
 
@@ -10,8 +10,8 @@
 
     <div class="filter-item">
         <p>
-            <a class="secondary-button" href="{% url 'admin_building_unit_edit' pk=0 %}">{% translate 'Add new unit' %}</a>&nbsp;
-            <a class="secondary-button" href="{% url 'admin_building_unit_export_to_excel' %}">{% translate 'Export to Excel' %}</a>&nbsp;
+            <a class="btn--primary" href="{% url 'admin_building_unit_edit' pk=0 %}">{% translate 'Add new unit' %}</a>&nbsp;
+            <a class="btn--secondary" href="{% url 'admin_building_unit_export_to_excel' %}">{% translate 'Export to Excel' %}</a>&nbsp;
         </p>
     </div>
 
@@ -50,6 +50,7 @@
     </div>
 </div>
 
+<div class="table-wrapper">
 <table class="list full-width" aria-describedby="tbl-desc">
     <tr>
         <th class="hide-on-mobile">&nbsp;</th>
@@ -68,9 +69,9 @@
     {% for obj in object_list %}
     <tr id="unit_{{ obj.pk }}">
         <td class="hide-on-mobile">{{ forloop.counter }}</td>
-        <td class="icon"><a href="{% url 'admin_building_unit_edit' pk=obj.pk %}"><img src="/static/gfx/pencil.png" class="led" title="{% translate 'Edit' %}" alt="{% translate 'Edit' %}"></a></td>
-        <td class="icon"><a href="{% url 'admin_building_unit_owners' pk=obj.pk %}"><img src="/static/gfx/user.png" class="led" title="{% translate 'Owners' %}" alt="{% translate 'Owners' %}"></a></td>
-        <td class="icon"><a onclick="if (!confirm('{% translate 'Do you want to delete' %} {{ obj.type.description }} {{ obj.description }} ?')) return false;" href="{% url 'admin_building_unit_delete' pk=obj.id %}"><img src="/static/gfx/delete.png" class="led" title="{% translate 'Delete' %}" alt="{% translate 'Delete' %}"></a></td>
+        <td class="icon"><a class="icon-btn" title="{% translate 'Owners' %}" href="{% url 'admin_building_unit_owners' pk=obj.pk %}">{% icon 'user' %}</a></td>
+        <td class="icon"><a class="icon-btn icon-btn--delete" title="{% translate 'Delete' %}" onclick="if (!confirm('{% translate 'Do you want to delete' %} {{ obj.type.description }} {{ obj.description }} ?')) return false;" href="{% url 'admin_building_unit_delete' pk=obj.id %}">{% icon 'delete' %}</a></td>
+        <td class="icon"><a class="icon-btn" title="{% translate 'Edit' %}" href="{% url 'admin_building_unit_edit' pk=obj.pk %}">{% icon 'edit' %}</a></td>
         <td>{{ obj.type.description }}</td>
         <td>{{ obj.entrance.description }}</td>
         <td>{{ obj.registration_id }}</td>
@@ -81,5 +82,6 @@
     {% endfor %}
     {% endif %}
 </table>
+</div>
 
 {% endblock content %}

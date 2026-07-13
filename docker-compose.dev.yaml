@@ -1,0 +1,21 @@
+services:
+
+  svjis-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: svjis2-app:dev
+    container_name: svjis2_app
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./svjis:/app/svjis
+      - svjis_data:/app/svjis2-data
+    environment:
+      - DEBUG=True
+      - PYTHONUNBUFFERED=1
+      - SVJIS_DEV_MODE=true
+      - SVJIS_LOAD_DEMO_DATA=true
+
+volumes:
+  svjis_data:

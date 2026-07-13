@@ -5,8 +5,9 @@
 {% block content %}
 
 <h1 class="page-title" id="articles">{{ header }}</h1>
-<a class="secondary-button" href="{% url 'redaction_article_edit' pk=0 %}">{% translate 'Create new article' %}</a>
+<a class="btn--primary" href="{% url 'redaction_article_edit' pk=0 %}">{% translate 'Create new article' %}</a>
 
+<div class="table-wrapper">
 <table class="list full-width" aria-describedby="articles">
     <tr>
         <th class="icon">&nbsp;</th>
@@ -22,9 +23,9 @@
     {% if object_list %}
     {% for obj in object_list %}
     <tr>
-        <td class="icon"><a href="{% url 'article' slug=obj.slug %}?search={{ search }}"><img src="/static/gfx/find.png" class="led" title="{% translate 'View' %}" alt="{% translate 'View' %}"></a></td>
-        <td class="icon"><a href="{% url 'redaction_article_edit' pk=obj.id %}"><img src="/static/gfx/pencil.png" class="led" title="{% translate 'Edit' %}" alt="{% translate 'Edit' %}"></a></td>
-        <td class="icon"><a href="{% url 'redaction_article_notifications' pk=obj.id %}"><img src="/static/gfx/email_open_image.png" class="led" title="{% translate 'Send notifications' %}" alt="{% translate 'Send notifications' %}"></a></td>
+        <td class="icon"><a class="icon-btn" title="{% translate 'View' %}" href="{% url 'article' slug=obj.slug %}?search={{ search }}">{% icon 'view' %}</a></td>
+        <td class="icon"><a class="icon-btn" title="{% translate 'Send notifications' %}" href="{% url 'redaction_article_notifications' pk=obj.id %}">{% icon 'email' %}</a></td>
+        <td class="icon"><a class="icon-btn" title="{% translate 'Edit' %}" href="{% url 'redaction_article_edit' pk=obj.id %}">{% icon 'edit' %}</a></td>
         <td>{{ obj.header|highlight:search|safe }}</td>
         <td class="hide-on-mobile">{{ obj.menu.description }}</td>
         <td class="hide-on-mobile">{{ obj.author.first_name }}&nbsp;{{ obj.author.last_name }}</td>
@@ -34,5 +35,6 @@
     {% endfor %}
     {% endif %}
 </table>
+</div>
 
 {% endblock content %}

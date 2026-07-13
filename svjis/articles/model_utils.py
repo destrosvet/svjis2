@@ -83,13 +83,13 @@ def get_asset_icon(basename):
     _file_name, file_extension = os.path.splitext(basename)
     file_extension = file_extension[1:].lower()
     if file_extension in DOCUMENT_ICONS:
-        return f'Files_{file_extension.lower()}.gif'
+        return 'document'
     elif file_extension in PICTURE_ICONS:
-        return 'attach_image.gif'
+        return 'image'
     elif file_extension in VIDEO_ICONS:
-        return 'attach_video.gif'
+        return 'video'
     else:
-        return 'Files_unknown.gif'
+        return 'file'
 
 
 def get_age_in_minutes(timestamp_from_model) -> int | None:

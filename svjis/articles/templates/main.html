@@ -13,6 +13,11 @@
     {% for obj in article_list %}
     <!-- Article -->
     <div class="article-box">
+        {% if obj.cover_image %}
+        <a class="article-thumb" {% if search != '' %} href="{% url 'article' slug=obj.slug %}?search={{ search }}" {% else %} href="{% url 'article' slug=obj.slug %}" {% endif %}>
+            <img src="/media/{{ obj.cover_image }}" alt="">
+        </a>
+        {% endif %}
         <div class="article-desc">
             <h1 class="article-title-list"><a {% if search != '' %} href="{% url 'article' slug=obj.slug %}?search={{ search }}" {% else %} href="{% url 'article' slug=obj.slug %}" {% endif %}>{{ obj.header|highlight:search|safe }}</a></h1>
             <p class="info">
