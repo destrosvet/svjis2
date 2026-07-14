@@ -7,14 +7,12 @@
             <span class="menu-toggle__bar"></span>
             <span class="menu-toggle__bar"></span>
         </button>
-        <div class="app-header__logo">
+        <a class="app-header__logo" href="/" title="{% translate 'Go to homepage' %}">
             {% if company_picture %}
-            <a href="/" title="{% translate 'Go to homepage' %}">
-                <img id="logo" alt="logo" src="/media/{{ company_picture }}" />
-            </a>
+            <img id="logo" alt="logo" src="/media/{{ company_picture }}" />
             {% endif %}
             <span class="app-header__logo-text">{{ company_name|default:"SVJIS2" }}</span>
-        </div>
+        </a>
         <div class="app-header__spacer"></div>
         {% if request.user.is_authenticated %}
         <details class="user-menu">
