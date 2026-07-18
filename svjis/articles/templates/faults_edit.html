@@ -22,6 +22,7 @@
         <label class="label" for="{{ form.description.auto_id }}">{{ form.description.label }}</label><br>
         {{ form.description }}
     </p>
+    {% if is_resolver %}
     <p>
         <label class="label" for="{{ form.assigned_to_user.auto_id }}">{{ form.assigned_to_user.label }}</label><br>
         {{ form.assigned_to_user }}
@@ -30,6 +31,7 @@
         <label class="label" for="{{ form.closed.auto_id }}">{{ form.closed.label }}</label><br>
         {{ form.closed }}
     </p>
+    {% endif %}
 
     <p>
         <input class="black-submit" id="submit" type="submit" value="{% translate 'Save' %}" />
@@ -39,7 +41,9 @@
 <script>
     $(document).ready(function() {
         $('#id_entrance').select2({width: '250px'});
+        {% if is_resolver %}
         $('#id_assigned_to_user').select2({width: '250px'});
+        {% endif %}
     });
 </script>
 

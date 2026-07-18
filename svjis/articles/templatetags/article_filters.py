@@ -73,6 +73,11 @@ def replace_url_to_link(value):
 
 
 @register.filter()
+def fault_editable(fault, user):
+    return fault.can_be_edited_by(user)
+
+
+@register.filter()
 def yes_no(bool_value):
     result = gt("Yes") if bool_value else gt("No")
     return mark_safe(result)

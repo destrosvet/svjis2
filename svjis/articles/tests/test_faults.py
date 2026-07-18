@@ -128,3 +128,77 @@ class FaultsTest(UserDataMixin, PreferencesDataMixin, TestCase):
             "jiri", self.u_jiri_password, {'pk': 0, 'subject': 'test', 'description': 'test', 'closed': True}
         )
         self.assertEqual(fault.closed, True)
+
+    # Workflow: reporter can edit their own open ticket, but not its assignment/closed state
+    def test_creator_can_edit_own_open_fault(self):
+        fault = FaultReportFactory(created_by_user=self.u_peter, assigned_to_user=None, closed=False)
+        self.client.login(username='peter', password=self.u_peter_password)
+        response = self.client.post(
+            reverse('faults_fault_update'),
+            {
+                'pk': fault.pk,
+                'subject': 'updated subject',
+                'description': fault.description,
+                'created_by_user': self.u_jarda.pk,
+                'assigned_to_user': self.u_jarda.pk,
+                'closed': True,
+            },
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 200)
+
+        fault.refresh_from_db()
+        self.assertEqual(fault.subject, 'updated subject')
+        self.assertEqual(fault.created_by_user, self.u_peter)
+        self.assertIsNone(fault.assigned_to_user)
+        self.assertEqual(fault.closed, False)
+
+    def test_non_creator_non_resolver_cannot_edit_fault(self):
+        fault = FaultReportFactory(created_by_user=self.u_jarda, assigned_to_user=None, closed=False)
+        original_subject = fault.subject
+        self.client.login(username='peter', password=self.u_peter_password)
+        response = self.client.get(reverse('faults_fault_edit', kwargs={'pk': fault.pk}))
+        self.assertEqual(response.status_code, 404)
+
+        response = self.client.post(
+            reverse('faults_fault_update'),
+            {
+                'pk': fault.pk,
+                'subject': 'hacked',
+                'description': fault.description,
+                'created_by_user': fault.created_by_user.pk,
+            },
+        )
+        self.assertEqual(response.status_code, 404)
+        fault.refresh_from_db()
+        self.assertEqual(fault.subject, original_subject)
+
+    # Workflow: any resolver can close a ticket that has no resolver assigned yet
+    def test_resolver_can_close_unassigned_ticket(self):
+        fault = FaultReportFactory(created_by_user=self.u_peter, assigned_to_user=None, closed=False)
+        self.client.login(username='karel', password=self.u_karel_password)
+        response = self.client.get(
+            reverse('faults_fault_close_ticket', kwargs={'pk': fault.pk}),
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 200)
+
+        fault.refresh_from_db()
+        self.assertEqual(fault.closed, True)
+        self.assertEqual(fault.assigned_to_user, self.u_karel)
+        self.assertEqual(fault.logs.count(), 2)
+        assigned, closed = fault.logs.all()
+        self.assertEqual(assigned.type, assigned.TYPE_ASSIGNED)
+        self.assertEqual(closed.type, closed.TYPE_CLOSED)
+
+    def test_resolver_can_reopen_closed_ticket(self):
+        fault = FaultReportFactory(created_by_user=self.u_peter, assigned_to_user=self.u_karel, closed=True)
+        self.client.login(username='karel', password=self.u_karel_password)
+        response = self.client.get(
+            reverse('faults_fault_reopen_ticket', kwargs={'pk': fault.pk}),
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 200)
+
+        fault.refresh_from_db()
+        self.assertEqual(fault.closed, False)

@@ -118,22 +118,24 @@ def fault_view(request, slug):
     ctx['search'] = request.GET.get('search', '')
     ctx['asset_form'] = forms.FaultAssetForm
     ctx['comment_form'] = forms.FaultCommentForm
+    ctx['can_edit'] = fault.can_be_edited_by(request.user)
+    ctx['is_resolver'] = request.user.has_perm(svjis_fault_resolver)
     return render(request, "fault.html", ctx)
 
 
-@permission_required(svjis_fault_resolver)
+@permission_required(svjis_view_fault_menu)
 @require_GET
 def faults_fault_edit_view(request, pk):
-    if pk:
-        a = get_object_or_404(models.FaultReport, pk=pk)
-        form = forms.FaultReportForm(instance=a)
-    else:
-        form = forms.FaultReportForm
+    fault = get_object_or_404(models.FaultReport, pk=pk)
+    if not fault.can_be_edited_by(request.user):
+        raise Http404
+    form = forms.FaultReportForm(instance=fault)
 
     ctx = utils.get_context()
     ctx['aside_menu_name'] = _("Fault reporting")
     ctx['form'] = form
     ctx['pk'] = pk
+    ctx['is_resolver'] = request.user.has_perm(svjis_fault_resolver)
     ctx['aside_menu_items'] = get_side_menu('faults', request.user)
     ctx['tray_menu_items'] = utils.get_tray_menu('faults', request.user)
     return render(request, "faults_edit.html", ctx)
@@ -205,14 +207,29 @@ def faults_fault_create_save_view(request):
     return redirect(fault_view, slug=obj.slug)
 
 
-@permission_required(svjis_fault_resolver)
+@permission_required(svjis_view_fault_menu)
 @require_POST
 def faults_fault_update_view(request):
     pk = int(request.POST['pk'])
     instance = get_object_or_404(models.FaultReport, pk=pk)
-    form = forms.FaultReportForm(request.POST, instance=instance)
+    if not instance.can_be_edited_by(request.user):
+        raise Http404
     original_resolver = instance.assigned_to_user
     original_closed_status = instance.closed
+
+    # Only a resolver may reassign, (re)close, or reattribute a ticket; a reporter
+    # editing their own ticket must not be able to smuggle these in via crafted POST data.
+    data = request.POST
+    if not request.user.has_perm(svjis_fault_resolver):
+        data = request.POST.copy()
+        data['created_by_user'] = instance.created_by_user_id
+        data['assigned_to_user'] = original_resolver.pk if original_resolver else ''
+        if original_closed_status:
+            data['closed'] = 'on'
+        else:
+            data.pop('closed', None)
+
+    form = forms.FaultReportForm(data, instance=instance)
 
     with transaction.atomic():
         if form.is_valid():
@@ -365,6 +382,8 @@ def fault_watch_view(request):
 @require_GET
 def faults_fault_take_ticket_view(request, pk):
     fault = get_object_or_404(models.FaultReport, pk=pk)
+    if fault.closed:
+        return redirect(fault_view, slug=fault.slug)
     fault.assigned_to_user = request.user
     with transaction.atomic():
         fault.save()
@@ -377,14 +396,46 @@ def faults_fault_take_ticket_view(request, pk):
 @require_GET
 def faults_fault_close_ticket_view(request, pk):
     fault = get_object_or_404(models.FaultReport, pk=pk)
-    fault.closed = True
+    if fault.closed:
+        return redirect(fault_view, slug=fault.slug)
+
     with transaction.atomic():
+        # A ticket with no resolver yet must still be closeable by any resolver -
+        # closing it counts as taking and resolving it in one step.
+        if fault.assigned_to_user is None:
+            fault.assigned_to_user = request.user
+            fault.save()
+            fault.log_taking_ticket(request.user)
+
+        fault.closed = True
         fault.save()
         fault.log_closing_ticket(request.user)
 
         # Send closed notification
         recipients = [u for u in fault.watching_users.all() if u != request.user]
         utils.send_fault_closed_notification(
+            recipients, request.user, f"{request.scheme}://{request.get_host()}", fault
+        )
+
+    return redirect(fault_view, slug=fault.slug)
+
+
+# Faults - Reopen ticket
+@permission_required(svjis_fault_resolver)
+@require_GET
+def faults_fault_reopen_ticket_view(request, pk):
+    fault = get_object_or_404(models.FaultReport, pk=pk)
+    if not fault.closed:
+        return redirect(fault_view, slug=fault.slug)
+
+    with transaction.atomic():
+        fault.closed = False
+        fault.save()
+        fault.log_reopening_ticket(request.user)
+
+        # Send reopened notification
+        recipients = [u for u in fault.watching_users.all() if u != request.user]
+        utils.send_fault_reopened_notification(
             recipients, request.user, f"{request.scheme}://{request.get_host()}", fault
         )
 

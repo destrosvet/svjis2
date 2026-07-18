@@ -8,7 +8,7 @@ from django.conf import settings
 from django.contrib.auth.models import User, Group
 from django.db.models import Count
 from django.utils.translation import gettext_lazy as _
-from .permissions import svjis_answer_survey
+from .permissions import svjis_answer_survey, svjis_fault_reporter, svjis_fault_resolver
 
 
 COMMENT_IS_EDITABLE_MINUTES = getattr(settings, "SVJIS_COMMENT_IS_EDITABLE_MINUTES", 10)
@@ -445,12 +445,22 @@ class FaultReport(models.Model):
             ("svjis_fault_resolver", _("Can resolve fault")),
         )
 
+    def can_be_edited_by(self, user: User) -> bool:
+        if user.has_perm(svjis_fault_resolver):
+            return True
+        return not self.closed and user.has_perm(svjis_fault_reporter) and self.created_by_user_id == user.id
+
     def log_taking_ticket(self, user: User):
         FaultReportLog.objects.create(fault_report=self, user=user, resolver=user, type=FaultReportLog.TYPE_ASSIGNED)
 
     def log_closing_ticket(self, user: User):
         FaultReportLog.objects.create(
             fault_report=self, user=user, resolver=self.assigned_to_user, type=FaultReportLog.TYPE_CLOSED
+        )
+
+    def log_reopening_ticket(self, user: User):
+        FaultReportLog.objects.create(
+            fault_report=self, user=user, resolver=self.assigned_to_user, type=FaultReportLog.TYPE_REOPENED
         )
 
     def save(self, **kwargs):

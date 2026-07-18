@@ -21,3 +21,6 @@ class PreferencesDataMixin:
         cls.p_fault_closed = PreferencesFactory(
             key="mail.template.fault.closed", value="Uživatel {} uzavřel tiket {}: <br><br><br>{}"
         )
+        cls.p_fault_reopened = PreferencesFactory(
+            key="mail.template.fault.reopened", value="Uživatel {} znovu otevřel tiket {}: <br><br><br>{}"
+        )
