@@ -11,19 +11,19 @@
     <tr>
         <th>&nbsp;</th>
         <th class="icon">&nbsp;</th>
-        <th class="icon">&nbsp;</th>
         <th>{% translate 'Description' %}</th>
         <th>{% translate 'Address' %}</th>
+        <th class="icon">&nbsp;</th>
     </tr>
 
     {% if object_list %}
     {% for obj in object_list %}
-    <tr>
+    <tr class="row-link" onclick="location.href='{% url 'admin_entrance_edit' pk=obj.pk %}'">
         <td>{{ forloop.counter }}</td>
-        <td class="icon"><a class="icon-btn icon-btn--delete" title="{% translate 'Delete' %}" onclick="if (!confirm('{% translate 'Do you want to delete' %} {{ obj.description }} ?')) return false;" href="{% url 'admin_entrance_delete' pk=obj.id %}">{% icon 'delete' %}</a></td>
-        <td class="icon"><a class="icon-btn" title="{% translate 'Edit' %}" href="{% url 'admin_entrance_edit' pk=obj.pk %}">{% icon 'edit' %}</a></td>
+        <td class="icon"><a class="icon-btn icon-btn--delete" title="{% translate 'Delete' %}" onclick="event.stopPropagation(); if (!confirm('{% translate 'Do you want to delete' %} {{ obj.description }} ?')) return false;" href="{% url 'admin_entrance_delete' pk=obj.id %}">{% icon 'delete' %}</a></td>
         <td>{{ obj.description }}</td>
         <td>{{ obj.address }}</td>
+        <td class="icon"><a class="icon-btn" title="{% translate 'Edit' %}" onclick="event.stopPropagation()" href="{% url 'admin_entrance_edit' pk=obj.pk %}">{% icon 'edit' %}</a></td>
     </tr>
     {% endfor %}
     {% endif %}

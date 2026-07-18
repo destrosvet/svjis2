@@ -33,6 +33,7 @@ class Article(models.Model):
     slug = models.CharField(max_length=50, unique=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_date = models.DateTimeField(auto_now_add=True)
+    published_date = models.DateField(_("Publish date"), default=date.today)
     published = models.BooleanField(_("Published"), default=False)
     perex = models.TextField(_("Perex"))
     body = models.TextField(_("Body"), blank=True)
@@ -55,7 +56,7 @@ class Article(models.Model):
         return self.articlecomment_set.all()
 
     class Meta:
-        ordering = ['-id']
+        ordering = ['-published_date', '-id']
         permissions = (
             ("svjis_view_redaction_menu", _("Can view Redaction menu")),
             ("svjis_edit_article", _("Can edit Article")),

@@ -22,7 +22,7 @@
             <h1 class="article-title-list"><a {% if search != '' %} href="{% url 'article' slug=obj.slug %}?search={{ search }}" {% else %} href="{% url 'article' slug=obj.slug %}" {% endif %}>{{ obj.header|highlight:search|safe }}</a></h1>
             <p class="info">
                 <a href="{% url 'main_filtered' menu=obj.menu.id %}">{{ obj.menu.description }}</a>:
-                <strong>{{ obj.created_date|date:"d.m.Y" }}</strong>,
+                <strong>{{ obj.published_date|date:"d.m.Y" }}</strong>,
                 {% translate 'Author' %}: <strong>{{ obj.author.first_name }}&nbsp;{{ obj.author.last_name }}</strong>
                 {% if obj.comments %}
                     &nbsp;

@@ -50,6 +50,14 @@ msgstr "Nadpis"
 msgid "Published"
 msgstr "Zveřejnit"
 
+#: articles/models.py:36
+msgid "Publish date"
+msgstr "Datum publikování"
+
+#: articles/templates/redaction_article_edit.html:65
+msgid "Controls where the article sorts in the list - set an earlier date for archived content."
+msgstr "Určuje řazení článku v seznamu - u archivního obsahu nastavte starší datum."
+
 #: articles/models.py:31
 msgid "Perex"
 msgstr "Perex"
@@ -694,10 +702,21 @@ msgstr "Vlastnosti"
 #: articles/templates/advert_edit.html:46
 #: articles/templates/advert_edit.html:51 articles/templates/article.html:17
 #: articles/templates/fault.html:59
-#: articles/templates/redaction_article_edit.html:62
-#: articles/templates/redaction_article_edit.html:88
 msgid "Assets"
 msgstr "Přílohy"
+
+#: articles/templates/redaction_article_edit.html:62
+#: articles/templates/redaction_article_edit.html:99
+msgid "Attachments"
+msgstr "Přílohy ke stažení"
+
+#: articles/templates/redaction_article_edit.html:65
+msgid "Upload files (documents, spreadsheets, PDFs...) for readers to download from the article."
+msgstr "Nahrajte soubory (dokumenty, tabulky, PDF...), které si čtenáři budou moci u článku stáhnout."
+
+#: articles/templates/redaction_article_edit.html:104
+msgid "Save the article first to be able to attach downloadable files."
+msgstr "Nejprve článek uložte, poté budete moci přidávat přílohy ke stažení."
 
 #: articles/templates/advert_edit.html:82 articles/templates/fault.html:101
 #: articles/templates/redaction_article_edit.html:99

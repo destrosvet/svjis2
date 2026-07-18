@@ -59,6 +59,11 @@
                     <label class="common-label" for="{{ form.published.auto_id }}">{{ form.published.label }}</label>
                     {{ form.published }}
                 </p>
+                <p>
+                    <label class="common-label" for="{{ form.published_date.auto_id }}">{{ form.published_date.label }}</label>
+                    {{ form.published_date }}
+                    <span class="form-hint">{% translate 'Controls where the article sorts in the list - set an earlier date for archived content.' %}</span>
+                </p>
             </div>
         </div>
 
@@ -90,8 +95,9 @@
 
         {% if pk %}
         <div class="card">
-            <div class="card__header card__header--light">{% translate 'Assets' %}</div>
+            <div class="card__header card__header--light">{% translate 'Attachments' %}</div>
             <div class="card__body">
+                <p class="form-hint">{% translate 'Upload files (documents, spreadsheets, PDFs...) for readers to download from the article.' %}</p>
                 {% if form.instance.assets %}
                 <ul class="asset-list">
                     {% for a in form.instance.assets %}
@@ -119,6 +125,13 @@
                         <input class="btn--secondary btn--block" id="submit2" type="submit" value="{% translate 'Upload' %}" />
                     </p>
                 </form>
+            </div>
+        </div>
+        {% else %}
+        <div class="card">
+            <div class="card__header card__header--light">{% translate 'Attachments' %}</div>
+            <div class="card__body">
+                <p class="form-hint">{% translate 'Save the article first to be able to attach downloadable files.' %}</p>
             </div>
         </div>
         {% endif %}

@@ -30,7 +30,17 @@ class ArticleMenuForm(forms.ModelForm):
 class ArticleForm(forms.ModelForm):
     class Meta:
         model = models.Article
-        fields = ("header", "cover_image", "perex", "body", "menu", "allow_comments", "published", "visible_for_all")
+        fields = (
+            "header",
+            "cover_image",
+            "perex",
+            "body",
+            "menu",
+            "allow_comments",
+            "published",
+            "published_date",
+            "visible_for_all",
+        )
         widgets = {
             'header': forms.widgets.TextInput(attrs={'class': 'common-input full-width', 'size': '50'}),
             'cover_image': forms.widgets.FileInput(attrs={'class': 'common-input'}),
@@ -53,6 +63,9 @@ class ArticleForm(forms.ModelForm):
             'menu': forms.widgets.Select(attrs={'class': 'common-input', 'form': 'article-edit-form'}),
             'allow_comments': forms.widgets.CheckboxInput(attrs={'class': 'common-input-chck', 'form': 'article-edit-form'}),
             'published': forms.widgets.CheckboxInput(attrs={'class': 'common-input-chck', 'form': 'article-edit-form'}),
+            'published_date': forms.widgets.DateInput(
+                attrs={'class': 'common-input', 'type': 'date', 'form': 'article-edit-form'}, format='%Y-%m-%d'
+            ),
             'visible_for_all': forms.widgets.CheckboxInput(attrs={'class': 'common-input-chck', 'form': 'article-edit-form'}),
         }
 
