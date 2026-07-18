@@ -67,6 +67,11 @@ urlpatterns = [
         views_redaction.redaction_article_asset_delete_view,
         name='redaction_article_asset_delete',
     ),
+    path(
+        'redaction_article_image_upload/',
+        views_redaction.redaction_article_image_upload_view,
+        name='redaction_article_image_upload',
+    ),
     path('redaction_news/', views_redaction.redaction_news_view, name='redaction_news'),
     path('redaction_news_edit/<int:pk>/', views_redaction.redaction_news_edit_view, name='redaction_news_edit'),
     path('redaction_news_save/', views_redaction.redaction_news_save_view, name='redaction_news_save'),

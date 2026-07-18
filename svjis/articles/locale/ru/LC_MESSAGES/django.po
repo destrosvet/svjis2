@@ -1365,5 +1365,26 @@ msgstr ""
 
 #, fuzzy
 #~| msgid "Owners"
+#: articles/templates/redaction_article_edit.html:152
+msgid "Save the article first to be able to insert images."
+msgstr "Сначала сохраните статью, чтобы можно было вставлять изображения."
+
+#: articles/templates/redaction_article_edit.html:166
+#: articles/templates/redaction_article_edit.html:171
+msgid "Image upload failed."
+msgstr "Не удалось загрузить изображение."
+
+#: articles/views_redaction.py:322 articles/views_redaction.py:325
+msgid "Article not found"
+msgstr "Статья не найдена"
+
+#: articles/views_redaction.py:329
+msgid "No file was submitted"
+msgstr "Файл не был отправлен"
+
+#: articles/views_redaction.py:333
+msgid "Unsupported image type"
+msgstr "Неподдерживаемый тип изображения"
+
 #~ msgid "Owner"
 #~ msgstr "Владельцы"

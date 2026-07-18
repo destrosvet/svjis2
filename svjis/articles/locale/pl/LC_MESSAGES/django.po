@@ -1368,5 +1368,26 @@ msgstr "Dane za ostatnie {} dni."
 
 #, fuzzy
 #~| msgid "Owners"
+#: articles/templates/redaction_article_edit.html:152
+msgid "Save the article first to be able to insert images."
+msgstr "Najpierw zapisz artykuł, aby móc wstawiać obrazy."
+
+#: articles/templates/redaction_article_edit.html:166
+#: articles/templates/redaction_article_edit.html:171
+msgid "Image upload failed."
+msgstr "Przesyłanie obrazu nie powiodło się."
+
+#: articles/views_redaction.py:322 articles/views_redaction.py:325
+msgid "Article not found"
+msgstr "Nie znaleziono artykułu"
+
+#: articles/views_redaction.py:329
+msgid "No file was submitted"
+msgstr "Nie przesłano żadnego pliku"
+
+#: articles/views_redaction.py:333
+msgid "Unsupported image type"
+msgstr "Nieobsługiwany typ obrazu"
+
 #~ msgid "Owner"
 #~ msgstr "Właściciele"

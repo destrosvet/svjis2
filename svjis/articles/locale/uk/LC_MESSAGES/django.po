@@ -1357,5 +1357,26 @@ msgstr "Дані за останні {} днів."
 
 #, fuzzy
 #~| msgid "Owners"
+#: articles/templates/redaction_article_edit.html:152
+msgid "Save the article first to be able to insert images."
+msgstr "Спочатку збережіть статтю, щоб можна було вставляти зображення."
+
+#: articles/templates/redaction_article_edit.html:166
+#: articles/templates/redaction_article_edit.html:171
+msgid "Image upload failed."
+msgstr "Не вдалося завантажити зображення."
+
+#: articles/views_redaction.py:322 articles/views_redaction.py:325
+msgid "Article not found"
+msgstr "Статтю не знайдено"
+
+#: articles/views_redaction.py:329
+msgid "No file was submitted"
+msgstr "Файл не було надіслано"
+
+#: articles/views_redaction.py:333
+msgid "Unsupported image type"
+msgstr "Непідтримуваний тип зображення"
+
 #~ msgid "Owner"
 #~ msgstr "Власники"

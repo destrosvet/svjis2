@@ -1361,5 +1361,26 @@ msgstr ""
 
 #, fuzzy
 #~| msgid "Owners"
+#: articles/templates/redaction_article_edit.html:152
+msgid "Save the article first to be able to insert images."
+msgstr "Először mentse a cikket, hogy képeket szúrhasson be."
+
+#: articles/templates/redaction_article_edit.html:166
+#: articles/templates/redaction_article_edit.html:171
+msgid "Image upload failed."
+msgstr "A kép feltöltése nem sikerült."
+
+#: articles/views_redaction.py:322 articles/views_redaction.py:325
+msgid "Article not found"
+msgstr "A cikk nem található"
+
+#: articles/views_redaction.py:329
+msgid "No file was submitted"
+msgstr "Nem lett fájl elküldve"
+
+#: articles/views_redaction.py:333
+msgid "Unsupported image type"
+msgstr "Nem támogatott képtípus"
+
 #~ msgid "Owner"
 #~ msgstr "Tulajdonosok"

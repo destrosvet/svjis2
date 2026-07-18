@@ -1361,5 +1361,26 @@ msgstr ""
 
 #, fuzzy
 #~| msgid "Owners"
+#: articles/templates/redaction_article_edit.html:152
+msgid "Save the article first to be able to insert images."
+msgstr "Trước tiên hãy lưu bài viết để có thể chèn hình ảnh."
+
+#: articles/templates/redaction_article_edit.html:166
+#: articles/templates/redaction_article_edit.html:171
+msgid "Image upload failed."
+msgstr "Tải hình ảnh lên không thành công."
+
+#: articles/views_redaction.py:322 articles/views_redaction.py:325
+msgid "Article not found"
+msgstr "Không tìm thấy bài viết"
+
+#: articles/views_redaction.py:329
+msgid "No file was submitted"
+msgstr "Không có tệp nào được gửi"
+
+#: articles/views_redaction.py:333
+msgid "Unsupported image type"
+msgstr "Loại hình ảnh không được hỗ trợ"
+
 #~ msgid "Owner"
 #~ msgstr "Chủ sở hữu"

@@ -1,6 +1,10 @@
-from django.test import TestCase
+import tempfile
+
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
+from articles import models
 from .testdata import ArticleDataMixin
 
 
@@ -192,3 +196,51 @@ class ArticleListTest(ArticleDataMixin, TestCase):
         self.assertEqual(res_recipients[0].last_name, 'Beran')
         self.assertEqual(res_recipients[1].last_name, 'Brambůrek')
         self.assertEqual(res_recipients[2].last_name, 'Nebus')
+
+
+class ArticleImageUploadTest(ArticleDataMixin, TestCase):
+    def setUp(self):
+        self._media_dir = tempfile.TemporaryDirectory()
+        self._media_override = override_settings(MEDIA_ROOT=self._media_dir.name)
+        self._media_override.enable()
+        self.addCleanup(self._media_override.disable)
+        self.addCleanup(self._media_dir.cleanup)
+
+    def upload(self, article_pk, filename, content=b'fake-image-data'):
+        file = SimpleUploadedFile(filename, content)
+        return self.client.post(
+            reverse('redaction_article_image_upload'),
+            {'article_pk': article_pk, 'file': file},
+        )
+
+    def test_redactor_can_upload_image(self):
+        logged_in = self.client.login(username='jarda', password=self.u_jarda_password)
+        self.assertTrue(logged_in)
+
+        response = self.upload(self.article_for_all.pk, 'picture.png')
+        self.assertEqual(response.status_code, 200)
+
+        asset = models.ArticleAsset.objects.get(article=self.article_for_all)
+        self.assertEqual(response.json()['location'], f'/media/{asset.file}')
+        self.assertEqual(asset.description, 'picture.png')
+
+    def test_upload_rejects_non_image(self):
+        self.client.login(username='jarda', password=self.u_jarda_password)
+
+        response = self.upload(self.article_for_all.pk, 'document.pdf')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(models.ArticleAsset.objects.count(), 0)
+
+    def test_upload_rejects_unknown_article(self):
+        self.client.login(username='jarda', password=self.u_jarda_password)
+
+        response = self.upload(9999, 'picture.png')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(models.ArticleAsset.objects.count(), 0)
+
+    def test_upload_requires_permission(self):
+        self.client.login(username='peter', password=self.u_peter_password)
+
+        response = self.upload(self.article_for_all.pk, 'picture.png')
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(models.ArticleAsset.objects.count(), 0)

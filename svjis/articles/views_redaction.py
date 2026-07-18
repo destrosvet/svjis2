@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import Group, User
 from django.core.paginator import Paginator, InvalidPage
 from django.db.models import Q, Count
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone, dateformat
@@ -14,8 +14,10 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.translation import gettext as gt
 from django.views.decorators.http import require_GET, require_POST
 from datetime import datetime, timedelta
+import os
 from openpyxl import Workbook
 from openpyxl.styles import Font
+from .model_utils import PICTURE_ICONS
 from .user_agent import get_browser, get_os
 from .permissions import (
     svjis_view_redaction_menu,
@@ -320,6 +322,34 @@ def redaction_article_asset_save_view(request):
         for error in form.errors:
             messages.error(request, error)
     return redirect(reverse('redaction_article_edit', kwargs={'pk': article_pk}) + '#assets')
+
+
+@permission_required(svjis_edit_article)
+@require_POST
+def redaction_article_image_upload_view(request):
+    """Endpoint for images inserted via the TinyMCE editor in the article body.
+
+    Stores the image as an ArticleAsset and returns its URL as JSON:
+    {"location": "/media/..."}.
+    """
+    try:
+        article_pk = int(request.POST.get('article_pk'))
+    except (TypeError, ValueError):
+        return JsonResponse({'error': gt('Article not found')}, status=400)
+    article = models.Article.objects.filter(pk=article_pk).first()
+    if article is None:
+        return JsonResponse({'error': gt('Article not found')}, status=400)
+
+    file = request.FILES.get('file')
+    if file is None:
+        return JsonResponse({'error': gt('No file was submitted')}, status=400)
+
+    extension = os.path.splitext(file.name)[1][1:].lower()
+    if extension not in PICTURE_ICONS:
+        return JsonResponse({'error': gt('Unsupported image type')}, status=400)
+
+    asset = models.ArticleAsset.objects.create(article=article, description=file.name[:100], file=file)
+    return JsonResponse({'location': f'/media/{asset.file}'})
 
 
 @permission_required(svjis_edit_article)

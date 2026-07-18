@@ -1003,6 +1003,13 @@ img.article-img, video.article-video {
   border-radius: var(--radius-lg);
 }
 
+/* Images inserted via the body editor (no article-img class) */
+.article-detail img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg);
+}
+
 /* Comments */
 .comment-title {
   font-size: 1rem;

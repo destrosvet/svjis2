@@ -1349,6 +1349,27 @@ msgstr "Analytics"
 msgid "Data for last {} days."
 msgstr "Data for last {} days."
 
+#: articles/templates/redaction_article_edit.html:152
+msgid "Save the article first to be able to insert images."
+msgstr "Save the article first to be able to insert images."
+
+#: articles/templates/redaction_article_edit.html:166
+#: articles/templates/redaction_article_edit.html:171
+msgid "Image upload failed."
+msgstr "Image upload failed."
+
+#: articles/views_redaction.py:322 articles/views_redaction.py:325
+msgid "Article not found"
+msgstr "Article not found"
+
+#: articles/views_redaction.py:329
+msgid "No file was submitted"
+msgstr "No file was submitted"
+
+#: articles/views_redaction.py:333
+msgid "Unsupported image type"
+msgstr "Unsupported image type"
+
 #~ msgid "Owner"
 #~ msgstr "Owner"
 

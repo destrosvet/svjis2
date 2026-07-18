@@ -58,6 +58,19 @@ class ArticleForm(forms.ModelForm):
                     'entity_encoding': 'raw',
                     'height': '350px',
                     'width': '100%',
+                    'menubar': 'edit insert view format table help',
+                    'toolbar': 'undo redo | formatselect | '
+                    'bold italic backcolor | alignleft aligncenter '
+                    'alignright alignjustify | bullist numlist outdent indent | '
+                    'image | removeformat | help',
+                    # Uploaded images are stored as ArticleAssets; the handler is
+                    # defined in redaction_article_edit.html.
+                    'images_upload_handler': 'articleImagesUploadHandler',
+                    'automatic_uploads': True,
+                    'paste_data_images': True,
+                    # Keep /media/... URLs as-is so they work on the article page too.
+                    'relative_urls': False,
+                    'convert_urls': False,
                 },
             ),
             'menu': forms.widgets.Select(attrs={'class': 'common-input', 'form': 'article-edit-form'}),

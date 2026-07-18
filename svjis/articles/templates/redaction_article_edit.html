@@ -141,6 +141,37 @@
 </div>
 
 <script>
+// Upload handler for images inserted in the TinyMCE body editor.
+// Referenced by name from the ArticleForm widget config (images_upload_handler).
+window.articleImagesUploadHandler = function (blobInfo, progress) {
+    return new Promise(function (resolve, reject) {
+        var form = document.getElementById('article-edit-form');
+        var pk = form.querySelector('input[name="pk"]').value;
+        if (!pk || pk === '0') {
+            reject({message: '{% translate "Save the article first to be able to insert images." %}', remove: true});
+            return;
+        }
+        var data = new FormData();
+        data.append('file', blobInfo.blob(), blobInfo.filename());
+        data.append('article_pk', pk);
+        fetch('{% url "redaction_article_image_upload" %}', {
+            method: 'POST',
+            headers: {'X-CSRFToken': form.querySelector('input[name="csrfmiddlewaretoken"]').value},
+            body: data,
+        }).then(function (response) {
+            return response.json().catch(function () { return {}; }).then(function (result) {
+                if (response.ok && result.location) {
+                    resolve(result.location);
+                } else {
+                    reject({message: result.error || '{% translate "Image upload failed." %}', remove: true});
+                }
+            });
+        }).catch(function () {
+            reject({message: '{% translate "Image upload failed." %}', remove: true});
+        });
+    });
+};
+
 (function () {
     var details = document.querySelector('.group-select');
     if (!details) return;
