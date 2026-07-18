@@ -1366,8 +1366,6 @@ msgstr "Analiza"
 msgid "Data for last {} days."
 msgstr "Dane za ostatnie {} dni."
 
-#, fuzzy
-#~| msgid "Owners"
 #: articles/templates/redaction_article_edit.html:152
 msgid "Save the article first to be able to insert images."
 msgstr "Najpierw zapisz artykuł, aby móc wstawiać obrazy."
@@ -1389,5 +1387,7 @@ msgstr "Nie przesłano żadnego pliku"
 msgid "Unsupported image type"
 msgstr "Nieobsługiwany typ obrazu"
 
+#, fuzzy
+#~| msgid "Owners"
 #~ msgid "Owner"
 #~ msgstr "Właściciele"

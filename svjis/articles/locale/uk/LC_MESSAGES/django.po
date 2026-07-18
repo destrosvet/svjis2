@@ -1355,8 +1355,6 @@ msgstr "Аналітика"
 msgid "Data for last {} days."
 msgstr "Дані за останні {} днів."
 
-#, fuzzy
-#~| msgid "Owners"
 #: articles/templates/redaction_article_edit.html:152
 msgid "Save the article first to be able to insert images."
 msgstr "Спочатку збережіть статтю, щоб можна було вставляти зображення."
@@ -1378,5 +1376,7 @@ msgstr "Файл не було надіслано"
 msgid "Unsupported image type"
 msgstr "Непідтримуваний тип зображення"
 
+#, fuzzy
+#~| msgid "Owners"
 #~ msgid "Owner"
 #~ msgstr "Власники"

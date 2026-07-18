@@ -1359,8 +1359,6 @@ msgstr "Phân tích"
 msgid "Data for last {} days."
 msgstr ""
 
-#, fuzzy
-#~| msgid "Owners"
 #: articles/templates/redaction_article_edit.html:152
 msgid "Save the article first to be able to insert images."
 msgstr "Trước tiên hãy lưu bài viết để có thể chèn hình ảnh."
@@ -1382,5 +1380,7 @@ msgstr "Không có tệp nào được gửi"
 msgid "Unsupported image type"
 msgstr "Loại hình ảnh không được hỗ trợ"
 
+#, fuzzy
+#~| msgid "Owners"
 #~ msgid "Owner"
 #~ msgstr "Chủ sở hữu"

@@ -1360,8 +1360,6 @@ msgstr "Analytika"
 msgid "Data for last {} days."
 msgstr "Údaje za posledných {} dní."
 
-#, fuzzy
-#~| msgid "Owners"
 #: articles/templates/redaction_article_edit.html:152
 msgid "Save the article first to be able to insert images."
 msgstr "Najprv článok uložte, potom budete môcť vkladať obrázky."
@@ -1383,5 +1381,7 @@ msgstr "Nebol odoslaný žiadny súbor"
 msgid "Unsupported image type"
 msgstr "Nepodporovaný typ obrázka"
 
+#, fuzzy
+#~| msgid "Owners"
 #~ msgid "Owner"
 #~ msgstr "Vlastníci"

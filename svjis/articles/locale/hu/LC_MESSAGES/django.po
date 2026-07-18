@@ -1359,8 +1359,6 @@ msgstr "Analytics"
 msgid "Data for last {} days."
 msgstr ""
 
-#, fuzzy
-#~| msgid "Owners"
 #: articles/templates/redaction_article_edit.html:152
 msgid "Save the article first to be able to insert images."
 msgstr "Először mentse a cikket, hogy képeket szúrhasson be."
@@ -1382,5 +1380,7 @@ msgstr "Nem lett fájl elküldve"
 msgid "Unsupported image type"
 msgstr "Nem támogatott képtípus"
 
+#, fuzzy
+#~| msgid "Owners"
 #~ msgid "Owner"
 #~ msgstr "Tulajdonosok"

@@ -1352,8 +1352,6 @@ msgstr "Statistieken"
 msgid "Data for last {} days."
 msgstr "Gegevens van de afgelopen {} dagen."
 
-#, fuzzy
-#~| msgid "Owners"
 #: articles/templates/redaction_article_edit.html:152
 msgid "Save the article first to be able to insert images."
 msgstr "Sla het artikel eerst op om afbeeldingen te kunnen invoegen."
@@ -1375,6 +1373,8 @@ msgstr "Er is geen bestand verzonden"
 msgid "Unsupported image type"
 msgstr "Niet-ondersteund afbeeldingstype"
 
+#, fuzzy
+#~| msgid "Owners"
 #~ msgid "Owner"
 #~ msgstr "Eigenaars"
 
